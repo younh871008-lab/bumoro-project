@@ -1,4 +1,28 @@
 {
+  "permissions": {
+    "allow": [
+      "Bash(git *)",
+      "Bash(npm run *)",
+      "Bash(python3 *)",
+      "Bash(node *)",
+      "Bash(npx *)",
+      "Bash(ls *)",
+      "Bash(cat *)",
+      "Bash(echo *)",
+      "Bash(mkdir *)",
+      "Bash(cp *)",
+      "Bash(mv *)",
+      "Bash(find *)",
+      "Bash(grep *)",
+      "Bash(touch *)",
+      "Bash(rm *)",
+      "Bash(curl *)",
+      "Bash(pip3 *)",
+      "Bash(pip *)",
+      "Bash(which *)",
+      "Bash(pwd)"
+    ]
+  },
   "hooks": {
     "Stop": [
       {
@@ -6,7 +30,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "npm run lint 2>&1 && npm run build 2>&1 && npm run test 2>&1"
+            "command": "if [ -f package.json ]; then npm run lint 2>&1 && npm run build 2>&1 && npm run test 2>&1; fi"
           }
         ]
       }
@@ -17,7 +41,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "if echo \"$CLAUDE_TOOL_INPUT\" | grep -qE 'rm\\s+-rf|git\\s+push\\s+--force|git\\s+reset\\s+--hard|DROP\\s+TABLE'; then echo 'BLOCKED: 위험한 명령어가 감지되었습니다.' >&2; exit 1; fi"
+            "command": "if echo \"$CLAUDE_TOOL_INPUT\" | grep -qE 'rm\\s+-rf|git\\s+push\\s+(--force|-f)|git\\s+reset\\s+--hard|git\\s+clean\\s+-[a-z]*f|git\\s+checkout\\s+--|git\\s+restore\\s+\\.|DROP\\s+(TABLE|DATABASE)|TRUNCATE\\s+TABLE'; then echo 'BLOCKED: 위험한 명령어가 감지되었습니다.' >&2; exit 1; fi"
           }
         ]
       }

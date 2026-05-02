@@ -4,6 +4,13 @@ out/
 next-env.d.ts
 tsconfig.tsbuildinfo
 
+# secrets
+.env
+.env.*
+!.env.example
+
 # phase execution outputs
-phases/**/phase*-output.json
 phases/**/step*-output.json
+
+# 비즈니스 문서 (대용량 바이너리)
+*.pdf

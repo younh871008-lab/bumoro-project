@@ -435,7 +435,7 @@ class TestInvokeClaude:
         cmd = mock_run.call_args[0][0]
         assert cmd[0] == "claude"
         assert "-p" in cmd
-        assert "--dangerously-skip-permissions" in cmd
+        assert "--allowedTools" in cmd
         assert "--output-format" in cmd
         assert "PREAMBLE" in cmd[-1]
         assert "UI를 구현하세요" in cmd[-1]
