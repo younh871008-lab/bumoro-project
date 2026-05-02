@@ -2,30 +2,21 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-
-const REGIONS = [
-  "서울특별시",
-  "경기도",
-  "인천광역시",
-  "부산광역시",
-  "대구광역시",
-  "광주광역시",
-  "대전광역시",
-  "울산광역시",
-  "세종특별자치시",
-  "강원도",
-  "충청북도",
-  "충청남도",
-  "전라북도",
-  "전라남도",
-  "경상북도",
-  "경상남도",
-  "제주특별자치도",
-];
+import { SIDO_LIST, getSigunguList } from "@/lib/regions";
 
 export function BenefitsForm() {
   const [dueDate, setDueDate] = useState("");
-  const [region, setRegion] = useState("");
+  const [sido, setSido] = useState("");
+  const [sigungu, setSigungu] = useState("");
+
+  const sigunguList = getSigunguList(sido);
+  const isSejong = sido === "세종특별자치시";
+  const isReady = dueDate && sido && (isSejong || sigungu);
+
+  function handleSidoChange(value: string) {
+    setSido(value);
+    setSigungu("");
+  }
 
   return (
     <div className="bg-white rounded-2xl p-6 shadow-sm border border-bumoro-pink">
@@ -44,26 +35,44 @@ export function BenefitsForm() {
             className="w-full rounded-lg border border-bumoro-pink px-3 py-2 text-sm bg-bumoro-beige focus:outline-none focus:ring-2 focus:ring-bumoro-orange/40"
           />
         </div>
+
         <div>
           <label className="block text-sm font-medium text-bumoro-text mb-1">
-            거주지
+            거주지 (시/도)
           </label>
           <select
-            value={region}
-            onChange={(e) => setRegion(e.target.value)}
+            value={sido}
+            onChange={(e) => handleSidoChange(e.target.value)}
             className="w-full rounded-lg border border-bumoro-pink px-3 py-2 text-sm bg-bumoro-beige focus:outline-none focus:ring-2 focus:ring-bumoro-orange/40"
           >
             <option value="">시/도 선택</option>
-            {REGIONS.map((r) => (
-              <option key={r} value={r}>
-                {r}
-              </option>
+            {SIDO_LIST.map((s) => (
+              <option key={s} value={s}>{s}</option>
             ))}
           </select>
         </div>
+
+        {sido && !isSejong && (
+          <div>
+            <label className="block text-sm font-medium text-bumoro-text mb-1">
+              거주지 (시/군/구)
+            </label>
+            <select
+              value={sigungu}
+              onChange={(e) => setSigungu(e.target.value)}
+              className="w-full rounded-lg border border-bumoro-pink px-3 py-2 text-sm bg-bumoro-beige focus:outline-none focus:ring-2 focus:ring-bumoro-orange/40"
+            >
+              <option value="">시/군/구 선택</option>
+              {sigunguList.map((s) => (
+                <option key={s} value={s}>{s}</option>
+              ))}
+            </select>
+          </div>
+        )}
+
         <Button
           className="w-full bg-bumoro-orange hover:bg-bumoro-orange/90 text-white font-medium rounded-xl h-11"
-          disabled={!dueDate || !region}
+          disabled={!isReady}
         >
           혜택 조회하기
         </Button>
